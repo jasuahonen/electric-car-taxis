@@ -1,0 +1,19 @@
+# Ignore build directories
+/target/
+/out/
+
+# Ignore Maven wrapper files
+/.mvn/
+/mvnw
+/mvnw.cmd
+
+# Ignore IDE configuration files
+/.idea/
+/*.iml
+
+# Ignore log files
+*.log
+
+# Ignore operating system files
+.DS_Store
+Thumbs.db

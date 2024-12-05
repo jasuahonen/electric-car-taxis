@@ -1,0 +1,8 @@
+com/example/fleet/controller/FleetController.class
+com/example/fleet/messaging/FleetListener.class
+com/example/fleet/service/FleetService.class
+com/example/fleet/messaging/FleetPublisher.class
+com/example/fleet/messaging/FleetListener$TripEvent.class
+com/example/fleet/FleetApplication.class
+com/example/fleet/model/Car.class
+com/example/fleet/messaging/FleetPublisher$FleetUpdate.class
