@@ -127,16 +127,16 @@ Updated battery level for car: car-1
 ![Start a trip](https://github.com/user-attachments/assets/e441f1f7-47b8-4a43-bb7a-12ba7f117fea)
 ![Charge the car](https://github.com/user-attachments/assets/3c4cb862-ccc1-4343-821b-2692ebee91e5)
 
-# C4 Architecture
+# Architecture:
 
-* Context
-       ![context](https://github.com/user-attachments/assets/5926de81-92c1-4f54-bfd9-d09b5ebf2d47)
+# Context
+![context](https://github.com/user-attachments/assets/5926de81-92c1-4f54-bfd9-d09b5ebf2d47)
 
-* Container
-     ![container](https://github.com/user-attachments/assets/bf91406c-ac0e-44d6-8dfd-830bf98e8e3f)
+# Container
+![container](https://github.com/user-attachments/assets/bf91406c-ac0e-44d6-8dfd-830bf98e8e3f)
 
-* Component
-     ![component](https://github.com/user-attachments/assets/782ac780-d13a-47f1-83a6-dbda435d186b)
+# Component
+![component](https://github.com/user-attachments/assets/782ac780-d13a-47f1-83a6-dbda435d186b)
 
 # Sequence & Class Diagrams:
 
