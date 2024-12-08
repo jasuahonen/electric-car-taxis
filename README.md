@@ -127,9 +127,9 @@ Updated battery level for car: car-1
 ![Start a trip](https://github.com/user-attachments/assets/e441f1f7-47b8-4a43-bb7a-12ba7f117fea)
 ![Charge the car](https://github.com/user-attachments/assets/3c4cb862-ccc1-4343-821b-2692ebee91e5)
 
-# Sequence Diagrams:
+# Sequence & Class Diagrams:
 
-### Fleet Module Interaction (Add a Car)
+### Fleet Module Interaction (Add a Car) Sequence diagram
 
 ```mermaid
 sequenceDiagram
@@ -141,56 +141,50 @@ sequenceDiagram
     participant ActiveMQ
 
     User ->> FleetController: POST /fleet/cars
-    FleetController ->> FleetService: Process Add Car Request
-    FleetService ->> FleetRepository: Save Car Information
-    FleetService ->> FleetPublisher: Notify Fleet Updates
-    FleetPublisher ->> ActiveMQ: Publish fleet.car.updates
+    FleetController ->> FleetService: addCar(car)
+    FleetService ->> FleetRepository: Save car to database
+    FleetRepository -->> FleetService: Acknowledgement
+    FleetService ->> FleetPublisher: Publish fleet.car.updates
+    FleetPublisher ->> ActiveMQ: Publish event
+
 ```
-### Transport Module Interaction (Start a Transport Task)
+### Class diagram
 ```mermaid
-sequenceDiagram
-    participant User
-    participant TransportController
-    participant TransportService
-    participant FleetRepository
-    participant TransportPublisher
-    participant ActiveMQ
-    participant FleetListener
+classDiagram
+    class FleetController {
+        +addCar(car: Car): void
+        +getCars(): List<Car>
+        +getCarById(id: String): Car
+    }
 
-    User ->> TransportController: POST /transport/tasks
-    TransportController ->> TransportService: Create Transport Task
-    TransportService ->> FleetRepository: Fetch Available Cars
-    TransportService ->> TransportPublisher: Notify Task Started
-    TransportPublisher ->> ActiveMQ: Publish trips.started
-    ActiveMQ ->> FleetListener: Notify trips.started
-    FleetListener ->> FleetRepository: Update Fleet Data
+    class FleetService {
+        +addCar(car: Car): void
+        +updateCar(car: Car): void
+        +deleteCar(id: String): void
+        +notifyFleetUpdate(car: Car): void
+    }
+
+    class FleetPublisher {
+        +publishUpdate(event: String, data: Object): void
+    }
+
+    class FleetListener {
+        +onFleetUpdate(event: String, data: Object): void
+        +onTripStarted(event: String, data: Object): void
+        +onTripCompleted(event: String, data: Object): void
+    }
+
+    class Car {
+        +id: String
+        +model: String
+        +batteryCapacity: int
+        +currentBatteryLevel: int
+        +charging: boolean
+    }
+
+    FleetController --> FleetService : uses
+    FleetService --> FleetPublisher : uses
+    FleetListener --> FleetService : updates
+    FleetService --> Car : manages
+
 ```
-### Charging Module Interaction (Start Charging)
-```mermaid
-
-sequenceDiagram
-    participant User
-    participant ChargingController
-    participant ChargingService
-    participant ElectricityPriceService
-    participant PörssisähköAPI
-    participant PricingService
-    participant BatteryUpdate
-    participant ChargingPublisher
-    participant ActiveMQ
-    participant FleetListener
-    participant FleetRepository
-
-    User ->> ChargingController: POST /charging/start/car-1
-    ChargingController ->> ChargingService: Initiate Charging
-    ChargingService ->> ElectricityPriceService: Fetch Electricity Prices
-    ElectricityPriceService ->> PörssisähköAPI: GET /price.json
-    PörssisähköAPI -->> ElectricityPriceService: Return Prices
-    ElectricityPriceService -->> ChargingService: Send Prices
-    ChargingService ->> PricingService: Determine Cheapest Hour
-    PricingService -->> ChargingService: Return Cheapest Hour
-    ChargingService ->> BatteryUpdate: Simulate Charging Process
-    ChargingService ->> ChargingPublisher: Notify Battery Updates
-    ChargingPublisher ->> ActiveMQ: Publish fleet.car.updates
-    ActiveMQ ->> FleetListener: Notify fleet.car.updates
-
