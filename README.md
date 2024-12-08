@@ -123,3 +123,7 @@ Car car-1 is fully charged!
 # Fleet logs:
 Updated car car-1 battery level to 100%.
 Updated battery level for car: car-1
+
+![Start a trip](https://github.com/user-attachments/assets/e441f1f7-47b8-4a43-bb7a-12ba7f117fea)
+![Charge the car](https://github.com/user-attachments/assets/3c4cb862-ccc1-4343-821b-2692ebee91e5)
+
