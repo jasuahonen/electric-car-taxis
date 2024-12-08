@@ -9,15 +9,15 @@ charging: Handles charging the vehicles, fetches the cheapest hour to start char
 
 # Instructions
 This works with a local ActiveMQ server running at localhost:8161
-navigate to the server directory
-"cd apache-acticemq-6.X.X"
-"cd bin"
-and run:
-"activemq start"
+navigate to the server-directory
+"cd apache-activemq-6.X.X"
+"./bin/activemq start"
 
 Check server is up and running by navigating to: http://localhost:8161
 user: admin
 psswrd: admin
+
+You can then navigate to http://localhost:8161/admin -> Queues to see if the messages sent in the next steps come through.
 
 Start up the transport, fleet and charging repositories by navigating to them and running:
 "mvn spring-boot:run"
@@ -29,9 +29,8 @@ Base URL:
 http://localhost:8080/fleet
 
 # 1.1 Add a Car (POST)
-curl -X POST -H "Content-Type: application/json" -d
-'{"id": "car-2", "model": "Tesla Model Y", "batteryCapacity": 100, "currentBatteryLevel": 80, "charging": false}'
-http://localhost:8080/fleet/cars
+curl -X POST -H "Content-Type: application/json" -d '{"id": "car-2", "model": "Tesla Model Y", "batteryCapacity": 100, "currentBatteryLevel": 80, "charging": false}' http://localhost:8080/fleet/cars
+
 # Expected Result:
 Car added successfully.
 # Fleet logs
@@ -70,9 +69,7 @@ Base URL:
 http://localhost:8082/device
 
 # 2.1 Start a trip (POST)
-curl -X POST -H "Content-Type: application/json" -d
-'{"id": "task-1", "destination": "Downtown", "requiredBatteryLevel": 50, "tripDuration": 10, "batteryDrain": 5, "isCompleted": false}'
- http://localhost:8082/transport/tasks
+curl -X POST -H "Content-Type: application/json" -d '{"id": "task-1", "destination": "Downtown", "requiredBatteryLevel": 50, "tripDuration": 10, "batteryDrain": 5, "isCompleted": false}' http://localhost:8082/transport/tasks
 
  # Expected Result when a car is available:
 Task created successfully.
