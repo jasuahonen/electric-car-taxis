@@ -127,3 +127,70 @@ Updated battery level for car: car-1
 ![Start a trip](https://github.com/user-attachments/assets/e441f1f7-47b8-4a43-bb7a-12ba7f117fea)
 ![Charge the car](https://github.com/user-attachments/assets/3c4cb862-ccc1-4343-821b-2692ebee91e5)
 
+# Sequence Diagrams:
+
+### Fleet Module Interaction (Add a Car)
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant FleetController
+    participant FleetService
+    participant FleetRepository
+    participant FleetPublisher
+    participant ActiveMQ
+
+    User ->> FleetController: POST /fleet/cars
+    FleetController ->> FleetService: Process Add Car Request
+    FleetService ->> FleetRepository: Save Car Information
+    FleetService ->> FleetPublisher: Notify Fleet Updates
+    FleetPublisher ->> ActiveMQ: Publish fleet.car.updates
+```
+### Transport Module Interaction (Start a Transport Task)
+```mermaid
+sequenceDiagram
+    participant User
+    participant TransportController
+    participant TransportService
+    participant FleetRepository
+    participant TransportPublisher
+    participant ActiveMQ
+    participant FleetListener
+
+    User ->> TransportController: POST /transport/tasks
+    TransportController ->> TransportService: Create Transport Task
+    TransportService ->> FleetRepository: Fetch Available Cars
+    TransportService ->> TransportPublisher: Notify Task Started
+    TransportPublisher ->> ActiveMQ: Publish trips.started
+    ActiveMQ ->> FleetListener: Notify trips.started
+    FleetListener ->> FleetRepository: Update Fleet Data
+```
+### Charging Module Interaction (Start Charging)
+```mermaid
+
+sequenceDiagram
+    participant User
+    participant ChargingController
+    participant ChargingService
+    participant ElectricityPriceService
+    participant PörssisähköAPI
+    participant PricingService
+    participant BatteryUpdate
+    participant ChargingPublisher
+    participant ActiveMQ
+    participant FleetListener
+    participant FleetRepository
+
+    User ->> ChargingController: POST /charging/start/car-1
+    ChargingController ->> ChargingService: Initiate Charging
+    ChargingService ->> ElectricityPriceService: Fetch Electricity Prices
+    ElectricityPriceService ->> PörssisähköAPI: GET /price.json
+    PörssisähköAPI -->> ElectricityPriceService: Return Prices
+    ElectricityPriceService -->> ChargingService: Send Prices
+    ChargingService ->> PricingService: Determine Cheapest Hour
+    PricingService -->> ChargingService: Return Cheapest Hour
+    ChargingService ->> BatteryUpdate: Simulate Charging Process
+    ChargingService ->> ChargingPublisher: Notify Battery Updates
+    ChargingPublisher ->> ActiveMQ: Publish fleet.car.updates
+    ActiveMQ ->> FleetListener: Notify fleet.car.updates
+
