@@ -36,7 +36,7 @@ http://localhost:8080/fleet
 
 ## 1.1 Add a Car (POST)
 ```bash
-curl -X POST -H "Content-Type: application/json" -d '{"id": "car-1", "model": "Tesla Model S", "batteryCapacity": 100, "currentBatteryLevel": 100, "charging": false}' http://localhost:8080/fleet/cars
+curl -X POST -H "Content-Type: application/json" -d '{"id": "car-1", "model": "Tesla Model S", "batteryCapacity": 25, "currentBatteryLevel": 100, "charging": false}' http://localhost:8080/fleet/cars
 ```
 ```bash
 curl -X POST -H "Content-Type: application/json" -d '{"id": "car-2", "model": "Tesla Model Y", "batteryCapacity": 100, "currentBatteryLevel": 80, "charging": false}' http://localhost:8080/fleet/cars
