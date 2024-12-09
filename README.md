@@ -11,7 +11,7 @@ charging: Handles charging the vehicles, fetches the cheapest hour to start char
 This works with a local ActiveMQ server running at localhost:8161
 navigate to the server-directory
 ```bash
-cd apache-activemq-6.X.X
+cd server/apache-activemq-6.1.4/
 ```
 ```bash
 ./bin/activemq start
